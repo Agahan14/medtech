@@ -6,10 +6,10 @@ class CheckList(models.Model):
     MONTH_CHOICES = [
         (i, i) for i in range(1, 10)
     ]
-    patient = models.ForeignKey(Patient, on_delete=models.PROTECT)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     month = models.SmallIntegerField(choices=MONTH_CHOICES, null=True)
     recommendations = models.TextField(blank=True)
-    template = models.ForeignKey('CheckListTemplate', on_delete=models.PROTECT)
+    template = models.ForeignKey('CheckListTemplate', on_delete=models.CASCADE)
     is_archive = models.BooleanField(default=False)
 
     def __str__(self):

@@ -14,7 +14,7 @@
 #     # Calls test('world') every 30 seconds
 #     # sender.add_periodic_task(1.0, test.s('world'), expires=10)
 #     # Executes every Monday morning at 7:30 a.m.
-#     sender.add_periodic_task(10.0, send_email.s('иштечи родной'), name='email')
+#     sender.add_periodic_task(30.0, send_email.s('иштечи родной'), name='email')
 #     # sender.add_periodic_task(15.0, test.s('Happy Mondays!'), name='hb')
 #
 #

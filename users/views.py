@@ -71,7 +71,7 @@ class RegisterPatientView(generics.CreateAPIView):
                 return Response('You must create CheckListTemplate before Patient', status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             patient = Patient.objects.latest('id').id if Patient.objects.exists() else 1
-            template = CheckListTemplate.objects.latest('id')
+            template = CheckListTemplate.objects.get(id=1)
             answer_data = CheckListTemplateListSerializer(template).data
             answers = []
             for i in answer_data['title']:
@@ -201,7 +201,7 @@ class ArchivePatientViewSet(PatientViewSet):
             for j in i['question']:
                 answers.append(j['id'])
         for month in range(1, 10):
-            a = CheckList.objects.create(month=month, doctor_id=patient.doctor_field.id, patient_id=patient.pk,
+            a = CheckList.objects.create(month=month, patient_id=patient.pk,
                                          template=template)
             for question_id in answers:
                 Answer.objects.create(question_id=question_id, check_list=a)
