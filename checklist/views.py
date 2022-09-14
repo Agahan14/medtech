@@ -81,7 +81,7 @@ class ArchiveCheckListView(CheckListView):
 class CheckListTemplateView(viewsets.ModelViewSet):
     serializer_class = CheckListTemplateListSerializer
     queryset = CheckListTemplate.objects.all()
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'delete']
     # permission_classes = (IsAuthenticatedOrReadOnly,
     #                       IsSuperUserOrOfficeManager,)
 

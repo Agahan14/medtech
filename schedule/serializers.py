@@ -1,5 +1,3 @@
-from django.db.models import DateTimeField
-from django.db.models.functions import Trunc
 from rest_framework import serializers
 from users.api.custom_funcs import validate_for_appointment
 from users.models import Patient, Doctor
@@ -47,7 +45,7 @@ class ScheduleForBookingSerializer(ScheduleSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        exclude = ['time_zone']
+        fields = '__all__'
 
     def validate(self, data):
         doctor = data['doctor']
@@ -171,8 +169,8 @@ class GetDoctorScheduleForOneDaySerializer(serializers.ModelSerializer):
                             'appointment']
 
     def get_appointment(self, obj):
-        date = self.initial_data['date']
-        appointment = Appointment.objects.filter(date=date).order_by('time_slots_id')
+        date = self.initial_data[0]['date']
+        appointment = Appointment.objects.filter(date=date, patient__is_active=True, doctor_id=obj.id).order_by('time_slots__start')
         serializer = AppointmentForOneDayScheduleSerializer(instance=appointment, many=True)
         return serializer.data
 
@@ -208,4 +206,5 @@ class AppointmentForVisitHistorySerializer(serializers.ModelSerializer):
         fields = ['id',
                   'date',
                   'doctor',
+                  'patient',
                   'time_slots']

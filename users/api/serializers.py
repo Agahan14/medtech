@@ -2,6 +2,7 @@ from datetime import date, timedelta
 from dateutil import relativedelta
 from rest_framework import serializers
 
+from schedule.models import Appointment
 from schedule.serializers import AppointmentForVisitHistorySerializer
 from users.models import User, Doctor, Patient, OfficeManager
 from .custom_funcs import get_age, validate_inn
@@ -12,7 +13,8 @@ class PatientListSerializer(serializers.ModelSerializer):
     month_of_pregnancy = serializers.SerializerMethodField()
     approximate_date_of_pregnancy = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
-    appointment = AppointmentForVisitHistorySerializer(many=True, read_only=True)
+    appointment = serializers.SerializerMethodField()
+
     class Meta:
         model = Patient
         fields = ['id',
@@ -54,6 +56,11 @@ class PatientListSerializer(serializers.ModelSerializer):
     def get_approximate_date_of_pregnancy(self, obj):
         res = obj.date_of_pregnancy + timedelta(days=270)
         return res.strftime('%d.%m.%Y')
+
+    def get_appointment(self, obj):
+        appointment = Appointment.objects.filter(patient_id=obj.id).order_by('date', 'time_slots__start')
+        serializer = AppointmentForVisitHistorySerializer(many=True, read_only=True, instance=appointment)
+        return serializer.data
 
 
 class DoctorListSerializer(serializers.ModelSerializer):

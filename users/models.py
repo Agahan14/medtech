@@ -78,7 +78,7 @@ class Patient(UserForInheritance):
     image = models.ImageField(blank=True, null=True, upload_to='images/')
     date_of_pregnancy = models.DateField(auto_now_add=False)
     inn = models.CharField(max_length=14, unique=True)
-    doctor_field = models.ForeignKey('Doctor', on_delete=models.PROTECT, related_name='patient')
+    doctor_field = models.ForeignKey('Doctor', on_delete=models.CASCADE, related_name='patient')
 
 
 class Doctor(UserForInheritance):

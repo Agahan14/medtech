@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import Doctor, Patient
 
+
 class TimeSlots(models.Model):
     start = models.TimeField()
     end = models.TimeField()
@@ -34,6 +35,15 @@ class Appointment(models.Model):
     def __str__(self):
         return f'{self.doctor} {self.date} {self.patient}'
 
+    def save(self, *args, **kwargs):
+        phone = self.patient.phone[1:]
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        client.messages.create(
+            from_='whatsapp:+14155238886',
+            body=f'Здравствуйте вы записаны к {self.doctor.first_name} {self.doctor.last_name} на {self.date.strftime("%d-%m-%Y")} в {self.time_slots.start}',
+            to=f'whatsapp:+{phone}'
+        )
+        super().save(*args, **kwargs)
 
 
 class Holidays(models.Model):
