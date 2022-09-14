@@ -47,7 +47,7 @@ class ScheduleForBookingSerializer(ScheduleSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = '__all__'
+        exclude = ['time_zone']
 
     def validate(self, data):
         doctor = data['doctor']

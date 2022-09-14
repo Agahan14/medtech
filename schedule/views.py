@@ -184,3 +184,20 @@ class GetDoctorScheduleForOneDayViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+from medtech.settings import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
+from twilio.rest import Client
+from threading import Timer
+
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+run_at = datetime.now() + timedelta(seconds=10)
+now = datetime.now()
+delay = (run_at - now).total_seconds()
+
+Timer(delay, client.messages.create,
+      kwargs={
+         "body": ' Напоминаем что вы записаны к врачу.\nДата: 23.08.2022. \nВремя: 11:00 ',
+         "from_":'whatsapp:+14155238886',
+         "to":'whatsapp:+996777896674',
+}).start()

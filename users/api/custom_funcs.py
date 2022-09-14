@@ -81,9 +81,9 @@ def validate_for_appointment(data, doctor):
     date = data['date']
     time_slots = data['time_slots']
     week_day = date.strftime('%A').lower()
-    if datetime.date.today() > date:
-        raise serializers.ValidationError('Этот день прошёл.')
-    elif Holidays.objects.filter(doctor=doctor, day=date).exists():
+    # if datetime.datetime.today() > date:
+    #     raise serializers.ValidationError('Этот день прошёл.')
+    if Holidays.objects.filter(doctor=doctor, day=date).exists():
         raise serializers.ValidationError('У доктора в этот день выходной.')
     elif datetime.date.today() == date:
         raise serializers.ValidationError('Бронирование на сегодняшний день недоступно.')
